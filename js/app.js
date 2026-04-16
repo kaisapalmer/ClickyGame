@@ -7,6 +7,7 @@ let score = 0;
 
 // HTML DOM
 const button1 = document.getElementById('button1');
+const scoreDisplay = document.getElementById('scoreDisplay');
 
 // UI Functions
 button1.addEventListener('click', () => {
@@ -16,5 +17,5 @@ button1.addEventListener('click', () => {
 // Functions
 function increaseScore() {
   score++;
-  console.log(score);
+  scoreDisplay.innerText = score;
 }
