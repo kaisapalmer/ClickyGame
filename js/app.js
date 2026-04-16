@@ -3,6 +3,18 @@
 // See a countdown timer so that I know how much time is left.
 
 // Variables
-let score;
+let score = 0;
 
 // HTML DOM
+const button1 = document.getElementById('button1');
+
+// UI Functions
+button1.addEventListener('click', () => {
+  increaseScore();
+})
+
+// Functions
+function increaseScore() {
+  score++;
+  console.log(score);
+}
