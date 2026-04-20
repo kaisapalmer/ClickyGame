@@ -4,17 +4,31 @@
 
 // Variables
 let score = 0;
-let timer = 60;
+let timer = 5;
 
 // HTML DOM
 const button1 = document.getElementById('button1');
+const button2 = document.getElementById('button2');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const countdownText = document.getElementById('countdownText');
+const label1 = document.getElementById('label1');
+const input1 = document.getElementById('name');
+const scoreboard = document.getElementById('scoreboard');
 
-// UI Functions
+input1.style.display = 'none';
+label1.style.display = 'none';
+button2.style.display = 'none';
+
+
+// UI Functions & Events
 button1.addEventListener('click', () => {
   increaseScore();
 })
+
+button2.addEventListener('click', () => {
+  submitHighScore();
+})
+
 
 // Functions
 function increaseScore() {
@@ -31,5 +45,47 @@ let interval = setInterval(()=> decreaseTimer(), 1000);
 setTimeout(() => {
   clearInterval(interval);
   button1.disabled = true;
-  alert("Game over!")
+  input1.style.display = 'block';
+  label1.style.display = 'block';
+  button2.style.display = 'block';
 }, 1000 * timer);
+
+function submitHighScore() {
+  fetch("https://hooks.zapier.com/hooks/catch/8338993/ujs9jj9/", {
+    method: "POST",
+    body: JSON.stringify({
+      name: input1.value,
+      score: score
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("POST response:", data);
+    });
+}
+
+function getScoreboardData () {
+  const url = 'https://script.google.com/macros/s/AKfycbys5aEPMvNCutyhNYYCcQcCjzsi2UtqNspmKyCH-AicJxJbCJMrAoT0LUaYaXhTWA8n/exec';
+
+  fetch(url)
+    .then(response => {
+      console.log('Response object:', response);
+      return response.json();
+    })
+    .then(data => {
+      console.log('Scoreboard data:', data);
+
+      data.forEach((player, index) => {
+        console.log(`Row ${index + 1}: Name=${player.name}, Score=${player.score}`);
+        let p = document.createElement("p");
+        p.innerHTML = `Row ${index + 1}: ${player.name} ${player.score} poäng`;
+        scoreboard.appendChild(p);
+      });
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+}
+getScoreboardData();
+
+
