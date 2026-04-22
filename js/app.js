@@ -7,8 +7,8 @@ let score = 0;
 let timer = 5;
 
 // HTML DOM
-const button1 = document.getElementById('button1');
-const button2 = document.getElementById('button2');
+const gameButton = document.getElementById('gameButton');
+const highScoreButton = document.getElementById('highScoreButton');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const countdownText = document.getElementById('countdownText');
 const label1 = document.getElementById('label1');
@@ -17,16 +17,50 @@ const scoreboard = document.getElementById('scoreboard');
 
 input1.style.display = 'none';
 label1.style.display = 'none';
-button2.style.display = 'none';
+highScoreButton.style.display = 'none';
 
 
 // UI Functions & Events
-button1.addEventListener('click', () => {
-  increaseScore();
-})
+let gameStarted = false;
+let interval;
 
-button2.addEventListener('click', () => {
-  submitHighScore();
+gameButton.innerText = "Start Game";
+
+gameButton.addEventListener('click', () => {
+  if (gameStarted === false) {
+    gameStarted = true;
+    // If the game has started the button changes text to "Click me!"
+    gameButton.innerText = "Click me!";
+
+    interval = setInterval(() => decreaseTimer(), 1000);
+
+    setTimeout(() => {
+      // If the time is out the button can't be clicked again.
+      clearInterval(interval);
+      gameButton.disabled = true;
+      input1.style.display = 'block';
+      label1.style.display = 'block';
+      highScoreButton.style.display = 'block';
+    }, 1000 * timer);
+   // Otherwise the button can still be clicked to improve score
+  } else {
+    increaseScore();
+  }
+});
+
+highScoreButton.addEventListener('click', () => {
+
+  // före poängen submittas, t.ex. disable knapp så man inte kan trycka fler gånger
+  // Button is disabled after submitted a high score
+  highScoreButton.disabled = true;
+
+  submitHighScore().then(() => {
+    // When the score is submitted after clicking the submit button the input field empties
+    input1.value = "";
+    // Shows an alert when the score is submitted so the player knows it was successful
+    alert("Your score is submitted");
+  });
+
 })
 
 
@@ -40,18 +74,8 @@ function decreaseTimer() {
   countdownText.innerText = timer;
 }
 
-let interval = setInterval(()=> decreaseTimer(), 1000);
-
-setTimeout(() => {
-  clearInterval(interval);
-  button1.disabled = true;
-  input1.style.display = 'block';
-  label1.style.display = 'block';
-  button2.style.display = 'block';
-}, 1000 * timer);
-
 function submitHighScore() {
-  fetch("https://hooks.zapier.com/hooks/catch/8338993/ujs9jj9/", {
+  return fetch("https://hooks.zapier.com/hooks/catch/8338993/ujs9jj9/", {
     method: "POST",
     body: JSON.stringify({
       name: input1.value,
