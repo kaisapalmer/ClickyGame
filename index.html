@@ -24,24 +24,31 @@
 
 <body>
 
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
+ <header>
+    <p id="header">Welcome to the ClickyGame!</p>
+  </header>
 
+ <div id="game">
   <p id="scoreDisplay">0</p>
   <p id="countdownText">5</p>
   <button id="button1">Click me!</button>
-  <label id="label1" for="name">Name (3 to 16 characters):</label>
+ </div>
 
+ <div id="highScoreForm">
+  <label id="label1" for="name">Add your name to the High Score:</label>
   <input
     type="text"
     id="name"
     name="name"
     required
     minlength="3"
-    maxlength="8"
+    maxlength="16"
     size="16" />
 
   <button id="button2">Submit High Score</button>
+ </div>
+
+
   <div id="scoreboard"></div>
 
 

@@ -73,18 +73,25 @@ function getScoreboardData () {
       return response.json();
     })
     .then(data => {
-      console.log('Scoreboard data:', data);
+      console.log("Scoreboard data:", data);
 
-      data.forEach((player, index) => {
-        console.log(`Row ${index + 1}: Name=${player.name}, Score=${player.score}`);
-        let p = document.createElement("p");
-        p.innerHTML = `Row ${index + 1}: ${player.name} ${player.score} poäng`;
-        scoreboard.appendChild(p);
-      });
+      scoreboard.innerHTML = "<h2>Top 10 High Scores</h2>";
+
+      data
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10)
+        .forEach((player, index) => {
+          let p = document.createElement("p");
+
+          p.innerHTML = `
+        <span class="rank">#${index + 1}</span>
+        <span class="playerName">${player.name}</span>
+        <span class="playerScore">${player.score} poäng</span>
+      `;
+
+          scoreboard.appendChild(p);
+        });
     })
-    .catch(error => {
-      console.error('Fetch error:', error);
-    });
 }
 getScoreboardData();
 
