@@ -4,7 +4,7 @@
 
 // Variables
 let score = 0;
-let timer = 5;
+let timer = 60;
 
 // HTML DOM
 const gameButton = document.getElementById('gameButton');
@@ -49,7 +49,10 @@ gameButton.addEventListener('click', () => {
 });
 
 highScoreButton.addEventListener('click', () => {
-
+  if (input1.value.length < 3 || input1.value.length >= 16) {
+    alert("The name needs to be between 3 and 16 characters");
+    return;
+  }
   // före poängen submittas, t.ex. disable knapp så man inte kan trycka fler gånger
   // Button is disabled after submitted a high score
   highScoreButton.disabled = true;
@@ -59,7 +62,12 @@ highScoreButton.addEventListener('click', () => {
     input1.value = "";
     // Shows an alert when the score is submitted so the player knows it was successful
     alert("Your score is submitted");
-  });
+  })
+    .catch((error) => {
+      console.log(error);
+      alert("Something went wrong");
+      highScoreButton.disabled = false;
+    });
 
 })
 
@@ -116,6 +124,10 @@ function getScoreboardData () {
           scoreboard.appendChild(p);
         });
     })
+    .catch(error => {
+      console.log(error);
+      alert("Something went wrong");
+    });
 }
 getScoreboardData();
 
