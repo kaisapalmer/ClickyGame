@@ -114,7 +114,7 @@ function getScoreboardData () {
       console.log("Scoreboard data:", data);
 
       scoreboard.innerHTML = "<h2>Top 10 High Scores</h2>";
-      
+
       // Filters out invalid scores, sorts players by score, and displays the top 10
       data
         .filter(player => !Number.isNaN(Number(player.score)))
